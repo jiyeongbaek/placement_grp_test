@@ -68,6 +68,15 @@ class SceneObject():
         self.assembly_pose.header.frame_id = "base"
 
 
+        # self.assembly_pose.pose.position.x = 1.1 #1.15
+        # self.assembly_pose.pose.position.y = 0.2     # -0.2
+        # self.assembly_pose.pose.position.z = 1.58
+        # self.assembly_pose.pose.orientation.x = -0.6628315
+        # self.assembly_pose.pose.orientation.y = -0.288225
+        # self.assembly_pose.pose.orientation.z = 0.3090834
+        # self.assembly_pose.pose.orientation.w = 0.6181004
+
+
         self.assembly_pose.pose.position.x = 1.1 #1.15
         self.assembly_pose.pose.position.y = 0.2     # -0.2
         self.assembly_pose.pose.position.z = 1.58
@@ -75,7 +84,6 @@ class SceneObject():
         self.assembly_pose.pose.orientation.y = -0.288225
         self.assembly_pose.pose.orientation.z = 0.3090834
         self.assembly_pose.pose.orientation.w = 0.6181004
-
 
 
 if __name__ == '__main__':
