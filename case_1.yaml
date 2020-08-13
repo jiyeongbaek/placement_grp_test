@@ -1,0 +1,50 @@
+panda_left:
+  - top :
+    - plusX :
+      - link8 : 0.8
+    - plusY : 
+      - link3 : 0.6
+      - link2 : 0.5
+      - link1 : 0.8
+    - minusY :
+      - link2 : 0.8
+    - plusZ :
+      - link5 : 0.5
+    - minusZ : 
+      - link8 : 0.3
+      - link7 : 0.2
+      - link4 : 0.5
+      - link3 : 0.5
+
+  - bottom :
+
+
+panda_right:
+  - top :
+    - plusX : 
+      - link8 : 0.5
+    - plusY : 
+      - link1 : 0.5
+    - minusY : 
+      - link1 : 0.5
+    - minusZ : 
+      - link8 : 0.7
+      - link7 : 0.6
+      - link3 : 0.3
+      - link1 : 0.5
+
+  - bottom  :
+    - plusX :
+      - link8 : 0.5
+    - minusY : 
+      - link1 : 0.65
+    - plusZ :
+      - link1 : 0.4
+
+
+
+
+
+panda_top:
+  - top :
+  - bottom :
