@@ -106,6 +106,7 @@ class SuhanMotionPlannerManager:
         self.planner.add_box(np.array([0.35, 0.20, 0.16]), 'sub_table', np.array([0.72, -0.04, 1.0805]), np.array([0, 0, 0, 1]))
         self.planner.add_box(np.array([0.20, 0.15, 0.16]), 'sub_table2', np.array([0.40, -0.55, 1.0805]), np.array([0, 0, 0, 1]))
         self.planner.add_box(np.array([0.15, 0.20, 0.16]), 'sub_table3', np.array([0.6, 0.4, 1.0805]), np.array([0, 0, 0, 1]))
+        self.planner.add_box(np.array([0.20, 0.20, 0.16]), 'sub_table4', np.array([0.44, 0.075, 1.0805]), np.array([0, 0, 0, 1]))
         
 
         self.planner.publish_planning_scene_msg()
