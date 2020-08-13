@@ -1,0 +1,186 @@
+#!/usr/bin/env python
+
+from __future__ import print_function
+from suhan_motion_planner import SuhanMotionPlannerManager
+import sys
+import copy
+import rospy
+import moveit_commander
+import actionlib
+
+import std_msgs.msg
+import geometry_msgs.msg
+import moveit_msgs.msg
+import tf_conversions
+import math
+from math import pi
+from moveit_commander.conversions import pose_to_list
+from tf.transformations import quaternion_matrix
+import numpy as np
+# from MoveGroupPlanner import *
+
+import yaml
+import tf2_ros
+import rospkg
+import tf
+
+
+class ContinuousGraspCandid():
+    def __init__(self, package='regrasp_constraint_planner', path='yaml/bottom/link1.yaml', dir='minusY'):
+        rospack = rospkg.RosPack()
+        self.package_path = rospack.get_path(package)
+        self.file_path = self.package_path + '/' + path
+        self.dir = dir
+        with open(self.file_path, 'r') as stream:
+            self.yaml = yaml.safe_load(stream)
+
+    def get_grasp(self, index, ratio):
+        lb = np.array(self.yaml[self.dir][index]['lower_bound'])
+        ub = np.array(self.yaml[self.dir][index]['upper_bound'])
+        ori = np.array(self.yaml[self.dir][index]['orientation'])
+        # print((ub-lb) * ratio + lb)
+        # print(ori)
+        return ((ub-lb) * ratio + lb , ori)
+
+    def get_grasp_pose_msg(self, index, ratio):
+        g = self.get_grasp(index, ratio)
+        pose_msg = geometry_msgs.msg.PoseStamped()
+        pose_msg.header.frame_id = "assembly_frame"
+        pose_msg.header.stamp = rospy.Time(0)
+        pose_msg.pose.position.x = g[0][0]
+        pose_msg.pose.position.y = g[0][1]
+        pose_msg.pose.position.z = g[0][2]
+        pose_msg.pose.orientation.x = g[1][0]
+        pose_msg.pose.orientation.y = g[1][1]
+        pose_msg.pose.orientation.z = g[1][2]
+        pose_msg.pose.orientation.w = g[1][3]
+        return pose_msg
+
+
+class SceneObject():
+    def __init__(self):
+        self.stefan_dir = 'package://grasping_point//STEFAN/stl/assembly.stl'
+        # self.stefan_dir = rospack.get_path(
+        #     "grasping_point") + "/STEFAN/stl/assembly.stl"
+        # self.stefan_dir = "package://STEFAN/stl/"
+        self.assembly = "assembly"
+        self.assembly_pose = geometry_msgs.msg.PoseStamped()
+        self.assembly_pose.header.frame_id = "base"
+
+        self.assembly_pose.pose.position.x = 0.97
+        self.assembly_pose.pose.position.y = 0.17
+        self.assembly_pose.pose.position.z = 1.161
+        self.assembly_pose.pose.orientation.x = 0
+        self.assembly_pose.pose.orientation.y = 0
+        self.assembly_pose.pose.orientation.z = 0.4067366
+        self.assembly_pose.pose.orientation.w = 0.9135455
+
+        # original
+        # self.assembly_pose.pose.position.x = 1.00024
+        # self.assembly_pose.pose.position.y = 0.0439698
+        # self.assembly_pose.pose.position.z = 1.32961
+        # self.assembly_pose.pose.orientation.x = -0.132545
+        # self.assembly_pose.pose.orientation.y = -0.0792691
+        # self.assembly_pose.pose.orientation.z = 0.171113
+        # self.assembly_pose.pose.orientation.w = 0.973072
+
+        # self.assembly_pose.pose.position.x = 1.0 #1.15
+        # self.assembly_pose.pose.position.y = -0.0 # -0.2
+        # self.assembly_pose.pose.position.z = 1.58
+        # self.assembly_pose.pose.orientation.x = -0.7313537
+        # self.assembly_pose.pose.orientation.y = 0.0
+        # self.assembly_pose.pose.orientation.z = -0.0
+        # self.assembly_pose.pose.orientation.w = 0.6819984
+
+
+        # self.assembly_pose.pose.position.x = 1.1 #1.15
+        # self.assembly_pose.pose.position.y = 0.2     # -0.2
+        # self.assembly_pose.pose.position.z = 1.58
+        # self.assembly_pose.pose.orientation.x = -0.6628315
+        # self.assembly_pose.pose.orientation.y = -0.288225
+        # self.assembly_pose.pose.orientation.z = 0.3090834
+        # self.assembly_pose.pose.orientation.w = 0.6181004
+
+
+
+if __name__ == '__main__':
+
+    sys.argv.append('joint_states:=/panda_dual/joint_states')
+    rospy.init_node('assembly_task_manager', argv=sys.argv)
+    topic_name = '/assembly/state_transition'
+    mdp = SuhanMotionPlannerManager(sys.argv)
+    
+    mdp.planner.set_ompl_debug_level(2)
+    
+    stefan = SceneObject()
+    mdp.planner.add_collision_mesh(stefan.stefan_dir, np.array([stefan.assembly_pose.pose.position.x, stefan.assembly_pose.pose.position.y, stefan.assembly_pose.pose.position.z]), np.array(
+        [stefan.assembly_pose.pose.orientation.x, stefan.assembly_pose.pose.orientation.y, stefan.assembly_pose.pose.orientation.z, stefan.assembly_pose.pose.orientation.w]), "assembly")
+
+    
+    mdp.planner.publish_planning_scene_msg()
+    assembly_frame = geometry_msgs.msg.TransformStamped()
+    assembly_frame.header.frame_id = "base"
+    assembly_frame.header.stamp = rospy.Time.now()
+    assembly_frame.child_frame_id = "assembly_frame"
+    assembly_frame.transform.translation = stefan.assembly_pose.pose.position
+    assembly_frame.transform.rotation = stefan.assembly_pose.pose.orientation
+
+    listener = tf.TransformListener()
+    listener.setTransform(assembly_frame)
+
+    mdp.planner.publish_planning_scene_msg()
+    rospy.sleep(1)
+
+    grp_1st = ContinuousGraspCandid('regrasp_constraint_planner', 'yaml/top/link8.yaml', 'minusZ')
+    t1 = listener.transformPose("base", grp_1st.get_grasp_pose_msg(0, 0.4))
+
+    grp_2nd = ContinuousGraspCandid('regrasp_constraint_planner', 'yaml/bottom/link1.yaml', 'minusY')
+    t2 = listener.transformPose("base", grp_2nd.get_grasp_pose_msg(0, 0.7))
+
+    grp_3rd = ContinuousGraspCandid('regrasp_constraint_planner', 'yaml/bottom/link5.yaml', 'minusZ')
+    t3 = listener.transformPose("base", grp_3rd.get_grasp_pose_msg(0, 0.3))
+
+    mdp.planner.publish_planning_scene_msg()
+    
+    plan1 = mdp.plan_target_pose("panda_left", np.array([t1.pose.position.x, t1.pose.position.y, t1.pose.position.z]), np.array([t1.pose.orientation.x, t1.pose.orientation.y, t1.pose.orientation.z, t1.pose.orientation.w]))
+    if plan1 == None:
+        print("1 ik failed")
+    else:
+        mdp.display_path()
+        p = mdp.planner.get_solved_path()        
+        mdp.planner.set_start_arm_states(p[-1])
+        mdp.planner.update_arm_states(p[-1])
+        rospy.sleep(2)
+    
+    
+    plan2 = mdp.plan_target_pose("panda_right", np.array([t2.pose.position.x, t2.pose.position.y, t2.pose.position.z]),np.array([t2.pose.orientation.x, t2.pose.orientation.y, t2.pose.orientation.z, t2.pose.orientation.w]))
+    if plan2 == None:
+        print("2 ik failed")
+    else:
+        mdp.display_path()    
+        p = mdp.planner.get_solved_path()
+        mdp.planner.set_start_arm_states(p[-1])
+        mdp.planner.update_arm_states(p[-1])
+        print(p[-1])
+        rospy.sleep(2)
+    
+
+    plan3 = mdp.plan_target_pose("panda_top", np.array([t3.pose.position.x, t3.pose.position.y, t3.pose.position.z]), np.array([t3.pose.orientation.x, t3.pose.orientation.y, t3.pose.orientation.z, t3.pose.orientation.w]))
+    if plan3 == None:
+        print("3 ik failed")
+    else:
+        mdp.display_path()
+        rospy.sleep(3)
+        p = mdp.planner.get_solved_path()
+        mdp.planner.set_start_arm_states(p[-1])
+        mdp.planner.update_arm_states(p[-1])
+        print(p[-1])
+    
+    # mdp.planner.add_collision_mesh(stefan.stefan_dir, np.array([stefan.assembly_pose.pose.position.x, stefan.assembly_pose.pose.position.y, stefan.assembly_pose.pose.position.z]), np.array(
+    #     [stefan.assembly_pose.pose.orientation.x, stefan.assembly_pose.pose.orientation.y, stefan.assembly_pose.pose.orientation.z, stefan.assembly_pose.pose.orientation.w]), "stefan")
+    
+    mdp.planner.publish_planning_scene_msg()
+    mdp.planner.publish_planning_scene_msg()
+    # print(t1)
+    # print(t2)
+    # print(t3)
