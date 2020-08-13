@@ -25,36 +25,36 @@ import rospkg
 import tf
 
 
-# class ContinuousGraspCandid():
-#     def __init__(self, package='regrasp_constraint_planner', path='yaml/bottom/link1.yaml', dir='minusY'):
-#         rospack = rospkg.RosPack()
-#         self.package_path = rospack.get_path(package)
-#         self.file_path = self.package_path + '/' + path
-#         self.dir = dir
-#         with open(self.file_path, 'r') as stream:
-#             self.yaml = yaml.safe_load(stream)
+class ContinuousGraspCandid():
+    def __init__(self, package='placement_grp_test', path='yaml/bottom/link1.yaml', dir='minusY'):
+        rospack = rospkg.RosPack()
+        self.package_path = rospack.get_path(package)
+        self.file_path = self.package_path + '/' + path
+        self.dir = dir
+        with open(self.file_path, 'r') as stream:
+            self.yaml = yaml.safe_load(stream)
 
-#     def get_grasp(self, index, ratio):
-#         lb = np.array(self.yaml[self.dir][index]['lower_bound'])
-#         ub = np.array(self.yaml[self.dir][index]['upper_bound'])
-#         ori = np.array(self.yaml[self.dir][index]['orientation'])
-#         # print((ub-lb) * ratio + lb)
-#         # print(ori)
-#         return ((ub-lb) * ratio + lb , ori)
+    def get_grasp(self, index, ratio):
+        lb = np.array(self.yaml[self.dir][index]['lower_bound'])
+        ub = np.array(self.yaml[self.dir][index]['upper_bound'])
+        ori = np.array(self.yaml[self.dir][index]['orientation'])
+        # print((ub-lb) * ratio + lb)
+        # print(ori)
+        return ((ub-lb) * ratio + lb , ori)
 
-#     def get_grasp_pose_msg(self, index, ratio):
-#         g = self.get_grasp(index, ratio)
-#         pose_msg = geometry_msgs.msg.PoseStamped()
-#         pose_msg.header.frame_id = "assembly_frame"
-#         pose_msg.header.stamp = rospy.Time(0)
-#         pose_msg.pose.position.x = g[0][0]
-#         pose_msg.pose.position.y = g[0][1]
-#         pose_msg.pose.position.z = g[0][2]
-#         pose_msg.pose.orientation.x = g[1][0]
-#         pose_msg.pose.orientation.y = g[1][1]
-#         pose_msg.pose.orientation.z = g[1][2]
-#         pose_msg.pose.orientation.w = g[1][3]
-#         return pose_msg
+    def get_grasp_pose_msg(self, index, ratio):
+        g = self.get_grasp(index, ratio)
+        pose_msg = geometry_msgs.msg.PoseStamped()
+        pose_msg.header.frame_id = "assembly_frame"
+        pose_msg.header.stamp = rospy.Time(0)
+        pose_msg.pose.position.x = g[0][0]
+        pose_msg.pose.position.y = g[0][1]
+        pose_msg.pose.position.z = g[0][2]
+        pose_msg.pose.orientation.x = g[1][0]
+        pose_msg.pose.orientation.y = g[1][1]
+        pose_msg.pose.orientation.z = g[1][2]
+        pose_msg.pose.orientation.w = g[1][3]
+        return pose_msg
 
 
 class SceneObject():
@@ -185,50 +185,50 @@ if __name__ == '__main__':
     mdp.planner.publish_planning_scene_msg()
     rospy.sleep(1)
 
-    # grp_1st = ContinuousGraspCandid('regrasp_constraint_planner', 'yaml/top/link8.yaml', 'minusZ')
-    # t1 = listener.transformPose("base", grp_1st.get_grasp_pose_msg(0, 0.4))
+    grp_1st = ContinuousGraspCandid('regrasp_constraint_planner', 'yaml/top/link8.yaml', 'minusZ')
+    t1 = listener.transformPose("base", grp_1st.get_grasp_pose_msg(0, 0.4))
 
-    # grp_2nd = ContinuousGraspCandid('regrasp_constraint_planner', 'yaml/bottom/link1.yaml', 'minusY')
-    # t2 = listener.transformPose("base", grp_2nd.get_grasp_pose_msg(0, 0.7))
+    grp_2nd = ContinuousGraspCandid('regrasp_constraint_planner', 'yaml/bottom/link1.yaml', 'minusY')
+    t2 = listener.transformPose("base", grp_2nd.get_grasp_pose_msg(0, 0.7))
 
-    # grp_3rd = ContinuousGraspCandid('regrasp_constraint_planner', 'yaml/bottom/link5.yaml', 'minusZ')
-    # t3 = listener.transformPose("base", grp_3rd.get_grasp_pose_msg(0, 0.3))
+    grp_3rd = ContinuousGraspCandid('regrasp_constraint_planner', 'yaml/bottom/link5.yaml', 'minusZ')
+    t3 = listener.transformPose("base", grp_3rd.get_grasp_pose_msg(0, 0.3))
 
-    # mdp.planner.publish_planning_scene_msg()
+    mdp.planner.publish_planning_scene_msg()
     
-    # plan1 = mdp.plan_target_pose("panda_left", np.array([t1.pose.position.x, t1.pose.position.y, t1.pose.position.z]), np.array([t1.pose.orientation.x, t1.pose.orientation.y, t1.pose.orientation.z, t1.pose.orientation.w]))
-    # if plan1 == None:
-    #     print("1 ik failed")
-    # else:
-    #     mdp.display_path()
-    #     p = mdp.planner.get_solved_path()        
-    #     mdp.planner.set_start_arm_states(p[-1])
-    #     mdp.planner.update_arm_states(p[-1])
-    #     rospy.sleep(2)
+    plan1 = mdp.plan_target_pose("panda_left", np.array([t1.pose.position.x, t1.pose.position.y, t1.pose.position.z]), np.array([t1.pose.orientation.x, t1.pose.orientation.y, t1.pose.orientation.z, t1.pose.orientation.w]))
+    if plan1 == None:
+        print("1 ik failed")
+    else:
+        mdp.display_path()
+        p = mdp.planner.get_solved_path()        
+        mdp.planner.set_start_arm_states(p[-1])
+        mdp.planner.update_arm_states(p[-1])
+        rospy.sleep(2)
     
     
-    # plan2 = mdp.plan_target_pose("panda_right", np.array([t2.pose.position.x, t2.pose.position.y, t2.pose.position.z]),np.array([t2.pose.orientation.x, t2.pose.orientation.y, t2.pose.orientation.z, t2.pose.orientation.w]))
-    # if plan2 == None:
-    #     print("2 ik failed")
-    # else:
-    #     mdp.display_path()    
-    #     p = mdp.planner.get_solved_path()
-    #     mdp.planner.set_start_arm_states(p[-1])
-    #     mdp.planner.update_arm_states(p[-1])
-    #     print(p[-1])
-    #     rospy.sleep(2)
+    plan2 = mdp.plan_target_pose("panda_right", np.array([t2.pose.position.x, t2.pose.position.y, t2.pose.position.z]),np.array([t2.pose.orientation.x, t2.pose.orientation.y, t2.pose.orientation.z, t2.pose.orientation.w]))
+    if plan2 == None:
+        print("2 ik failed")
+    else:
+        mdp.display_path()    
+        p = mdp.planner.get_solved_path()
+        mdp.planner.set_start_arm_states(p[-1])
+        mdp.planner.update_arm_states(p[-1])
+        print(p[-1])
+        rospy.sleep(2)
     
 
-    # plan3 = mdp.plan_target_pose("panda_top", np.array([t3.pose.position.x, t3.pose.position.y, t3.pose.position.z]), np.array([t3.pose.orientation.x, t3.pose.orientation.y, t3.pose.orientation.z, t3.pose.orientation.w]))
-    # if plan3 == None:
-    #     print("3 ik failed")
-    # else:
-    #     mdp.display_path()
-    #     rospy.sleep(3)
-    #     p = mdp.planner.get_solved_path()
-    #     mdp.planner.set_start_arm_states(p[-1])
-    #     mdp.planner.update_arm_states(p[-1])
-    #     print(p[-1])
+    plan3 = mdp.plan_target_pose("panda_top", np.array([t3.pose.position.x, t3.pose.position.y, t3.pose.position.z]), np.array([t3.pose.orientation.x, t3.pose.orientation.y, t3.pose.orientation.z, t3.pose.orientation.w]))
+    if plan3 == None:
+        print("3 ik failed")
+    else:
+        mdp.display_path()
+        rospy.sleep(3)
+        p = mdp.planner.get_solved_path()
+        mdp.planner.set_start_arm_states(p[-1])
+        mdp.planner.update_arm_states(p[-1])
+        print(p[-1])
         
     mdp.planner.publish_planning_scene_msg()
     mdp.planner.publish_planning_scene_msg()
