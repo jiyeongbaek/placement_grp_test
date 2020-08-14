@@ -67,7 +67,7 @@ class SceneObject():
         self.assembly_pose = geometry_msgs.msg.PoseStamped()
         self.assembly_pose.header.frame_id = "base"
 
-        case = 12
+        case = 9
 
         if case == 1:
             self.assembly_pose.pose.position.x = 1.0
@@ -157,78 +157,26 @@ class SceneObject():
             self.assembly_pose.pose.orientation.w = q[3]
 
 
-        elif case == 8: # XYZ Euler_angle x:180 y:0 z:0
-            self.assembly_pose.pose.position.x = 0.95
+# ZXY Euler_angle  ZXY Euler_angle  ZXY Euler_angle  ZXY Euler_angle #
+        elif case == 8: # ZXY Euler_angle x:170 y:0 z:80
+            self.assembly_pose.pose.position.x = 0.53
+            self.assembly_pose.pose.position.y = 0.38
+            self.assembly_pose.pose.position.z = 1.58
+            q = (
+[ 0.7631294, 0.6403416, 0.0560226, 0.0667652 ]
+            )
+            self.assembly_pose.pose.orientation.x = q[0]
+            self.assembly_pose.pose.orientation.y = q[1]
+            self.assembly_pose.pose.orientation.z = q[2]
+            self.assembly_pose.pose.orientation.w = q[3]
+
+
+        elif case == 9: # ZXY Euler_angle x:170 y:0 z:90
+            self.assembly_pose.pose.position.x = 0.4
             self.assembly_pose.pose.position.y = 0.4
             self.assembly_pose.pose.position.z = 1.58
             q = (
-[ 1, 0, 0, 0 ]
-            )
-            self.assembly_pose.pose.orientation.x = q[0]
-            self.assembly_pose.pose.orientation.y = q[1]
-            self.assembly_pose.pose.orientation.z = q[2]
-            self.assembly_pose.pose.orientation.w = q[3]
-
-        elif case == 9: # XYZ Euler_angle x:180 y:0 z:-40
-            self.assembly_pose.pose.position.x = 0.8
-            self.assembly_pose.pose.position.y = 0.45
-            self.assembly_pose.pose.position.z = 1.58
-            q = (
-[ 0.9396926, 0.3420201, 0, 0 ]
-            )
-            self.assembly_pose.pose.orientation.x = q[0]
-            self.assembly_pose.pose.orientation.y = q[1]
-            self.assembly_pose.pose.orientation.z = q[2]
-            self.assembly_pose.pose.orientation.w = q[3]
-
-
-        elif case == 10: # XYZ Euler_angle x:180 y:0 z:-60
-            self.assembly_pose.pose.position.x = 0.7
-            self.assembly_pose.pose.position.y = 0.45
-            self.assembly_pose.pose.position.z = 1.58
-            q = (
-[ 0.8660254, 0.5, 0, 0 ]
-            )
-            self.assembly_pose.pose.orientation.x = q[0]
-            self.assembly_pose.pose.orientation.y = q[1]
-            self.assembly_pose.pose.orientation.z = q[2]
-            self.assembly_pose.pose.orientation.w = q[3]
-
-
-        elif case == 11: # XYZ Euler_angle x:180 y:0 z:-80
-            self.assembly_pose.pose.position.x = 0.6
-            self.assembly_pose.pose.position.y = 0.37
-            self.assembly_pose.pose.position.z = 1.58
-            q = (
-[ 0.7660444, 0.6427876, 0, 0 ]
-            )
-            self.assembly_pose.pose.orientation.x = q[0]
-            self.assembly_pose.pose.orientation.y = q[1]
-            self.assembly_pose.pose.orientation.z = q[2]
-            self.assembly_pose.pose.orientation.w = q[3]
-
-
-
-        elif case == 12: # XYZ Euler_angle x:180 y:0 z:15
-            self.assembly_pose.pose.position.x = 0.95
-            self.assembly_pose.pose.position.y = 0.3
-            self.assembly_pose.pose.position.z = 1.58
-            q = (
-[ 0.9914449, -0.1305262, 0, 0 ]
-            )
-            self.assembly_pose.pose.orientation.x = q[0]
-            self.assembly_pose.pose.orientation.y = q[1]
-            self.assembly_pose.pose.orientation.z = q[2]
-            self.assembly_pose.pose.orientation.w = q[3]
-
-
-
-        elif case == 13: # XYZ Euler_angle x:180 y:0 z:30
-            self.assembly_pose.pose.position.x = 0.95
-            self.assembly_pose.pose.position.y = 0.2
-            self.assembly_pose.pose.position.z = 1.58
-            q = (
-[ 0.9659258, -0.258819, 0, 0 ]
+[ 0.704416, 0.704416, 0.0616284, 0.0616284 ]
             )
             self.assembly_pose.pose.orientation.x = q[0]
             self.assembly_pose.pose.orientation.y = q[1]
