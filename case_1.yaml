@@ -1,4 +1,5 @@
 panda_left:
+
   - top :
     - plusX :
       - link8 : 0.8
@@ -20,6 +21,7 @@ panda_left:
 
 
 panda_right:
+
   - top :
     - plusX : 
       - link8 : 0.5
@@ -42,9 +44,27 @@ panda_right:
       - link1 : 0.4
 
 
-
-
-
 panda_top:
+
   - top :
+    - minusX : 
+      - link9 : 0.5
+      - link5 : 0.3
+    - plusY :
+      - link4 : 0.8
+
   - bottom :
+    - minusX :
+      - link5 : 0.3
+    - plusY :
+      - link3 : 0.5
+    - plusZ : 
+      - link8 : 0.2
+      - link6 : 0.5
+      - link5 : 0.8
+      - link4 : 0.5
+      - link3 : 0.9
+    - minusZ : 
+      - link6 : 0.5
+      - link5 : 0.4
+
