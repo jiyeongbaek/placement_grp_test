@@ -67,7 +67,7 @@ class SceneObject():
         self.assembly_pose = geometry_msgs.msg.PoseStamped()
         self.assembly_pose.header.frame_id = "base"
 
-        case = 7
+        case = 12
 
         if case == 1:
             self.assembly_pose.pose.position.x = 1.0
@@ -79,17 +79,17 @@ class SceneObject():
             self.assembly_pose.pose.orientation.w = 0.6181004
 
 
-#         elif case == 2: # XYZ Euler_angle x:0 y:0 z:45
-#             self.assembly_pose.pose.position.x = 1.0
-#             self.assembly_pose.pose.position.y = 0.145
-#             self.assembly_pose.pose.position.z = 1.2
-#             q = (
-# [ 0, 0, 0.3826834, 0.9238795 ]
-#             )
-#             self.assembly_pose.pose.orientation.x = q[0]
-#             self.assembly_pose.pose.orientation.y = q[1]
-#             self.assembly_pose.pose.orientation.z = q[2]
-#             self.assembly_pose.pose.orientation.w = q[3]
+        elif case == 2: # XYZ Euler_angle x:0 y:0 z:45
+            self.assembly_pose.pose.position.x = 1.0
+            self.assembly_pose.pose.position.y = 0.145
+            self.assembly_pose.pose.position.z = 1.2
+            q = (
+[ 0, 0, 0.3826834, 0.9238795 ]
+            )
+            self.assembly_pose.pose.orientation.x = q[0]
+            self.assembly_pose.pose.orientation.y = q[1]
+            self.assembly_pose.pose.orientation.z = q[2]
+            self.assembly_pose.pose.orientation.w = q[3]
 
 
         elif case == 3: # XYZ Euler_angle x:-90 y:0 z:0
@@ -157,6 +157,85 @@ class SceneObject():
             self.assembly_pose.pose.orientation.w = q[3]
 
 
+        elif case == 8: # XYZ Euler_angle x:180 y:0 z:0
+            self.assembly_pose.pose.position.x = 0.95
+            self.assembly_pose.pose.position.y = 0.4
+            self.assembly_pose.pose.position.z = 1.58
+            q = (
+[ 1, 0, 0, 0 ]
+            )
+            self.assembly_pose.pose.orientation.x = q[0]
+            self.assembly_pose.pose.orientation.y = q[1]
+            self.assembly_pose.pose.orientation.z = q[2]
+            self.assembly_pose.pose.orientation.w = q[3]
+
+        elif case == 9: # XYZ Euler_angle x:180 y:0 z:-40
+            self.assembly_pose.pose.position.x = 0.8
+            self.assembly_pose.pose.position.y = 0.45
+            self.assembly_pose.pose.position.z = 1.58
+            q = (
+[ 0.9396926, 0.3420201, 0, 0 ]
+            )
+            self.assembly_pose.pose.orientation.x = q[0]
+            self.assembly_pose.pose.orientation.y = q[1]
+            self.assembly_pose.pose.orientation.z = q[2]
+            self.assembly_pose.pose.orientation.w = q[3]
+
+
+        elif case == 10: # XYZ Euler_angle x:180 y:0 z:-60
+            self.assembly_pose.pose.position.x = 0.7
+            self.assembly_pose.pose.position.y = 0.45
+            self.assembly_pose.pose.position.z = 1.58
+            q = (
+[ 0.8660254, 0.5, 0, 0 ]
+            )
+            self.assembly_pose.pose.orientation.x = q[0]
+            self.assembly_pose.pose.orientation.y = q[1]
+            self.assembly_pose.pose.orientation.z = q[2]
+            self.assembly_pose.pose.orientation.w = q[3]
+
+
+        elif case == 11: # XYZ Euler_angle x:180 y:0 z:-80
+            self.assembly_pose.pose.position.x = 0.6
+            self.assembly_pose.pose.position.y = 0.37
+            self.assembly_pose.pose.position.z = 1.58
+            q = (
+[ 0.7660444, 0.6427876, 0, 0 ]
+            )
+            self.assembly_pose.pose.orientation.x = q[0]
+            self.assembly_pose.pose.orientation.y = q[1]
+            self.assembly_pose.pose.orientation.z = q[2]
+            self.assembly_pose.pose.orientation.w = q[3]
+
+
+
+        elif case == 12: # XYZ Euler_angle x:180 y:0 z:15
+            self.assembly_pose.pose.position.x = 0.95
+            self.assembly_pose.pose.position.y = 0.3
+            self.assembly_pose.pose.position.z = 1.58
+            q = (
+[ 0.9914449, -0.1305262, 0, 0 ]
+            )
+            self.assembly_pose.pose.orientation.x = q[0]
+            self.assembly_pose.pose.orientation.y = q[1]
+            self.assembly_pose.pose.orientation.z = q[2]
+            self.assembly_pose.pose.orientation.w = q[3]
+
+
+
+        elif case == 13: # XYZ Euler_angle x:180 y:0 z:30
+            self.assembly_pose.pose.position.x = 0.95
+            self.assembly_pose.pose.position.y = 0.2
+            self.assembly_pose.pose.position.z = 1.58
+            q = (
+[ 0.9659258, -0.258819, 0, 0 ]
+            )
+            self.assembly_pose.pose.orientation.x = q[0]
+            self.assembly_pose.pose.orientation.y = q[1]
+            self.assembly_pose.pose.orientation.z = q[2]
+            self.assembly_pose.pose.orientation.w = q[3]
+
+
 if __name__ == '__main__':
 
     sys.argv.append('joint_states:=/panda_dual/joint_states')
@@ -185,50 +264,60 @@ if __name__ == '__main__':
     mdp.planner.publish_planning_scene_msg()
     rospy.sleep(1)
 
-    grp_1st = ContinuousGraspCandid('regrasp_constraint_planner', 'yaml/top/link8.yaml', 'minusZ')
-    t1 = listener.transformPose("base", grp_1st.get_grasp_pose_msg(0, 0.4))
+    grp_1st = ContinuousGraspCandid('placement_grp_test', 'yaml/top/link8.yaml', 'minusZ')
+    t1 = listener.transformPose("base", grp_1st.get_grasp_pose_msg(0,    0.3    ))
 
-    grp_2nd = ContinuousGraspCandid('regrasp_constraint_planner', 'yaml/bottom/link1.yaml', 'minusY')
-    t2 = listener.transformPose("base", grp_2nd.get_grasp_pose_msg(0, 0.7))
+    grp_2nd = ContinuousGraspCandid('placement_grp_test', 'yaml/bottom/link1.yaml', 'plusZ')
+    t2 = listener.transformPose("base", grp_2nd.get_grasp_pose_msg(0, 0.4    ))
 
-    grp_3rd = ContinuousGraspCandid('regrasp_constraint_planner', 'yaml/bottom/link5.yaml', 'minusZ')
-    t3 = listener.transformPose("base", grp_3rd.get_grasp_pose_msg(0, 0.3))
+
+
+
+
+
+
+
+
+
+    # plusX minusX plusY minusY plusZ minusZ
+    grp_3rd = ContinuousGraspCandid('placement_grp_test', 'yaml/bottom/link1.yaml', 'plusZ')
+    t3 = listener.transformPose("base", grp_3rd.get_grasp_pose_msg(0, 0.8))
 
     mdp.planner.publish_planning_scene_msg()
+
+    # plan1 = mdp.plan_target_pose("panda_left", np.array([t1.pose.position.x, t1.pose.position.y, t1.pose.position.z]), np.array([t1.pose.orientation.x, t1.pose.orientation.y, t1.pose.orientation.z, t1.pose.orientation.w]))
+    # if plan1 == None:
+    #     print("1 ik failed")
+    # else:
+    #     mdp.display_path()
+    #     p = mdp.planner.get_solved_path()        
+    #     mdp.planner.set_start_arm_states(p[-1])
+    #     mdp.planner.update_arm_states(p[-1])
+    #     rospy.sleep(2)
     
-    plan1 = mdp.plan_target_pose("panda_left", np.array([t1.pose.position.x, t1.pose.position.y, t1.pose.position.z]), np.array([t1.pose.orientation.x, t1.pose.orientation.y, t1.pose.orientation.z, t1.pose.orientation.w]))
-    if plan1 == None:
-        print("1 ik failed")
-    else:
-        mdp.display_path()
-        p = mdp.planner.get_solved_path()        
-        mdp.planner.set_start_arm_states(p[-1])
-        mdp.planner.update_arm_states(p[-1])
-        rospy.sleep(2)
     
-    
-    plan2 = mdp.plan_target_pose("panda_right", np.array([t2.pose.position.x, t2.pose.position.y, t2.pose.position.z]),np.array([t2.pose.orientation.x, t2.pose.orientation.y, t2.pose.orientation.z, t2.pose.orientation.w]))
-    if plan2 == None:
-        print("2 ik failed")
-    else:
-        mdp.display_path()    
-        p = mdp.planner.get_solved_path()
-        mdp.planner.set_start_arm_states(p[-1])
-        mdp.planner.update_arm_states(p[-1])
-        print(p[-1])
-        rospy.sleep(2)
+    # plan2 = mdp.plan_target_pose("panda_right", np.array([t2.pose.position.x, t2.pose.position.y, t2.pose.position.z]),np.array([t2.pose.orientation.x, t2.pose.orientation.y, t2.pose.orientation.z, t2.pose.orientation.w]))
+    # if plan2 == None:
+    #     print("2 ik failed")
+    # else:
+    #     mdp.display_path()    
+    #     p = mdp.planner.get_solved_path()
+    #     mdp.planner.set_start_arm_states(p[-1])
+    #     mdp.planner.update_arm_states(p[-1])
+    #     print(p[-1])
+    #     rospy.sleep(2)
     
 
-    plan3 = mdp.plan_target_pose("panda_top", np.array([t3.pose.position.x, t3.pose.position.y, t3.pose.position.z]), np.array([t3.pose.orientation.x, t3.pose.orientation.y, t3.pose.orientation.z, t3.pose.orientation.w]))
-    if plan3 == None:
-        print("3 ik failed")
-    else:
-        mdp.display_path()
-        rospy.sleep(3)
-        p = mdp.planner.get_solved_path()
-        mdp.planner.set_start_arm_states(p[-1])
-        mdp.planner.update_arm_states(p[-1])
-        print(p[-1])
+    # plan3 = mdp.plan_target_pose("panda_top", np.array([t3.pose.position.x, t3.pose.position.y, t3.pose.position.z]), np.array([t3.pose.orientation.x, t3.pose.orientation.y, t3.pose.orientation.z, t3.pose.orientation.w]))
+    # if plan3 == None:
+    #     print("3 ik failed")
+    # else:
+    #     mdp.display_path()
+    #     rospy.sleep(3)
+    #     p = mdp.planner.get_solved_path()
+    #     mdp.planner.set_start_arm_states(p[-1])
+    #     mdp.planner.update_arm_states(p[-1])
+    #     print(p[-1])
         
     mdp.planner.publish_planning_scene_msg()
     mdp.planner.publish_planning_scene_msg()
