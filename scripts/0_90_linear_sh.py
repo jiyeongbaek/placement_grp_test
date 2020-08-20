@@ -67,7 +67,7 @@ class SceneObject():
         self.assembly_pose = geometry_msgs.msg.PoseStamped()
         self.assembly_pose.header.frame_id = "base"
 
-        case = 9
+        case = 5
 
         if case == 1:
             self.assembly_pose.pose.position.x = 1.0
@@ -156,7 +156,7 @@ class SceneObject():
             self.assembly_pose.pose.orientation.z = q[2]
             self.assembly_pose.pose.orientation.w = q[3]
 
-
+178.2462117 9.8465514 -79.8489182
 # ZXY Euler_angle  ZXY Euler_angle  ZXY Euler_angle  ZXY Euler_angle #
         elif case == 8: # ZXY Euler_angle x:170 y:0 z:80
             self.assembly_pose.pose.position.x = 0.53

@@ -73,6 +73,7 @@ class SuhanMotionPlannerManager:
         # q_arm = np.array([0, 0, 0, -pi/2, 0, pi/2, pi/4, 0, 0, 0, -pi/2, 0, pi/2, pi/4, 0, 0, 0, -pi/2, 0, pi/2, pi/4])
         q_arm = np.array([0, -0.785, 0, -1.571, 0, 1.571, 0.785, 0, -0.785, 0, -1.571, 0, 1.571, 0.785, 0, -0.785, 0, -1.571, 0, 1.571, 0.785])
         ee_pos = np.array([0, 0, 0.103])
+        ee_pos2 = np.array([0, 0, 0.0825])
         ee_quat = np.array([0,0,0,1])
 
         # planner needs to be initialized
@@ -97,7 +98,8 @@ class SuhanMotionPlannerManager:
         print (pos, quat)
 
         self.planner.set_end_effector_frame('panda_left', ee_pos, ee_quat)
-        self.planner.set_end_effector_frame('panda_right', pos, quat)
+        # self.planner.set_end_effector_frame('panda_right', pos, quat)
+        self.planner.set_end_effector_frame('panda_right', ee_pos2, ee_quat)
         self.planner.set_end_effector_frame('panda_top', ee_pos, ee_quat)
         self.planner.set_end_effector_margin('panda_left', np.array([0,0, 0.03]), eye)
         self.planner.set_end_effector_margin('panda_right', np.array([0,0, 0.03]), eye)
